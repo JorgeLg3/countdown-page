@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style> 
+        html {
+            background-color: #222;
+            color: #ddd;
+            font-family: "Jost", sans-serif;
+        }
+        body { 
+            display: grid; 
+            place-content: center; 
+            } 
+        .countdown { 
+            display: flex; 
+            gap: 0.3rem; 
+            margin-top: 120px; 
+            text-transform: uppercase; 
+            } 
+        .countdown div { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            row-gap: 0.4rem; 
+            }
+        .time { 
+            font-variant-numeric: tabular-nums; 
+            font-size: 50px; 
+            } 
+        .label { 
+            font-size: 12px;
+            text-align: center; 
+        } 
+        .separator {  
+            font-size: 45px;
+            } 
+        .smoke {
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+        }
+        .smoke canvas{
+            opacity: 40%;
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown">
+        <div class="days">
+            <span class="time">00</span>
+            <span class="label">Días</span>
+        </div>
+        <span aria-hidden="true" class="separator">:</span>
+        <div class="hours">
+            <span class="time">00</span>
+            <span class="label">Horas</span>
+        </div>
+        <span aria-hidden="true" class="separator">:</span>
+        <div class="minutes">
+            <span class="time">00</span>
+            <span class="label">Minutos</span>
+        </div>
+        <span aria-hidden="true" class="separator">:</span>
+        <div class="seconds">
+            <span class="time">00</span>
+            <span class="label">Segundos</span>
+        </div>
+    </div>
+    <div class="smoke">
+        <canvas id="smoke-canvas"></canvas>
+    </div>
+    <script>
+        // Constant delcaration 
+        const SECOND = 1000; 
+        const MINUTE = SECOND * 60; 
+        const HOUR = MINUTE * 60; 
+        const DAY = HOUR * 24; 
+        let countDownDate = new Date("Dec 29, 2024 18:00:00").getTime(); 
+
+        // Get the DOM elements const 
+        const $countdown = document.querySelector(".countdown"); 
+        const $days = $countdown.querySelector(".days span"); 
+        const $hours = $countdown.querySelector(".hours span"); 
+        const $minutes = $countdown.querySelector(".minutes span"); 
+        const $seconds = $countdown.querySelector(".seconds span"); 
+
+        const formatTime = (time) => { 
+            return Math.floor(time).toString().padStart(2, "0"); 
+        } 
+        // Update the count down every 1 second 
+        const x = setInterval(function() { 
+            const now = new Date().getTime(); 
+            const diffTime = countDownDate - now; 
+            // Time calculations for days, hours, minutes and seconds 
+            $days.innerText = formatTime(diffTime / DAY); 
+            $hours.innerText = formatTime((diffTime % DAY) / HOUR); 
+            $minutes.innerText = formatTime((diffTime % HOUR) / MINUTE); 
+            $seconds.innerText = formatTime((diffTime % MINUTE) / SECOND); 
+            // If the count down is over, write some text 
+            // if (diffTime < 0) { 
+            //     clearInterval(x); 
+            //     //document.getElementById("demo").innerHTML = "EXPIRED"; 
+            //     } 
+             }, 1000);
+
+        // ---------------------
+        //     SMOKE EFFECT 
+        // ----------------------
+        const NUM_PARTICLES = 50 
+        const canvas = document.getElementById("smoke-canvas")
+        const ctx = canvas.getContext("2d")
+
+        if (canvas) {
+            canvas.width = window.innerWidth
+            canvas.height = window.innerHeight + 100
+        }
+
+        const particles = []
+        const fps = 30 
+        const fpsInterval = 1000 / fps
+        let then = Date.now()
+
+        const smokeImage = new Image()
+        smokeImage.src = "./smoke.webp"
+
+        class Particle {
+            constructor(x, yt, size, opacity, rotation, rotationSpeed) {
+                this.x = Math.random() * canvas.width - canvas.width
+                this.y = Math.random() * canvas.height - canvas.height / 2
+                this.size = Math.random() * 3000 + 1000 // texture and z
+                this.opacity = Math.random() * 0.8 // initial opacity
+                this.rotation = Math.random() * Math.PI * 2 // initial rotation
+                this.rotationSpeed = Math.random() * 0.002 // rotation speed
+            }
+
+            update() {
+                this.rotation += this.rotationSpeed 
+            }
+
+            draw() {
+                ctx.save()
+                ctx.translate(this.x + this.size / 2, this.y + this.size / 2) // move origin to particle center
+                ctx.rotate(this.rotation)
+                ctx.globalAlpha = this.opacity 
+                ctx.drawImage(smokeImage, -this.size / 2, -this.size / 2, this.size, this.size) // draw
+                ctx.globalAlpha = 1.0 // restore transparency
+                ctx.restore() // restore initial state of the context
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < NUM_PARTICLES; i++) {
+                particles.push(new Particle())
+            }
+        }
+
+        function handleParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update()
+                particles[i].draw()
+
+                if (particles[i].size <= 1) {
+                    particles.splice(i, 1)
+                    i--
+                    particles.push(new Particle()) 
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate)
+
+            const now = Date.now()
+            const elapsed = now - then
+
+            if (elapsed > fpsInterval) {
+                then = now - (elapsed % fpsInterval)
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height)
+                handleParticles()
+            }
+        }
+
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth
+            canvas.height = window.innerHeight + 100
+        })
+
+        smokeImage.onload = () => {
+            init()
+            animate()
+        }
+    </script>
+</body>
+</html>
