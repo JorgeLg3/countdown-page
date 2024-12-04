@@ -7,7 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <style> 
+    <style>
+        @font-face { font-family: Typewriter; src: url('Typewriter.ttf'); }
         * {
             margin: 0;
             padding: 0;
@@ -16,15 +17,28 @@
             background-color: #222;
             color: #ddd;
             font-family: "Jost", sans-serif;
+            font-family: Typewriter;
         }
         body { 
             display: grid; 
             place-content: center; 
-            } 
+            }
+        .title {
+            margin-top: 100px;
+            display: flex;
+            justify-content: center;
+            font-size: 40px;
+        }
+        .classified{
+            background-color: #ddd;
+            width: 200px;
+            border-radius: 1px;
+        }
         .countdown { 
             display: flex; 
+            justify-content: center;
             gap: 0.3rem; 
-            margin-top: 120px; 
+            margin-top: 50px; 
             text-transform: uppercase; 
             } 
         .countdown div { 
@@ -57,6 +71,10 @@
     </style>
 </head>
 <body>
+    <div class="title">
+        <span>Proyecto T</span>
+        <span class="classified"></span>
+    </div>
     <div class="countdown">
         <div class="days">
             <span class="time">00</span>
@@ -87,7 +105,7 @@
         const MINUTE = SECOND * 60; 
         const HOUR = MINUTE * 60; 
         const DAY = HOUR * 24; 
-        let countDownDate = new Date("Dec 29, 2024 18:00:00").getTime(); 
+        let countDownDate = new Date("Jan 02, 2025 19:00:00").getTime(); 
 
         // Get the DOM elements const 
         const $countdown = document.querySelector(".countdown"); 
