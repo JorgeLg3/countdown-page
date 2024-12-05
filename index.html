@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Proyecto T</title>
     <style>
         @font-face { font-family: Typewriter; src: url('Typewriter.ttf'); }
         * {
@@ -16,8 +13,7 @@
         html {
             background-color: #222;
             color: #ddd;
-            font-family: "Jost", sans-serif;
-            font-family: Typewriter;
+            font-family: Typewriter, sans-serif;
         }
         body { 
             display: grid; 
@@ -105,7 +101,7 @@
         const MINUTE = SECOND * 60; 
         const HOUR = MINUTE * 60; 
         const DAY = HOUR * 24; 
-        let countDownDate = new Date("Jan 02, 2025 19:00:00").getTime(); 
+        let countDownDate = new Date(1735840800000).getTime(); 
 
         // Get the DOM elements const 
         const $countdown = document.querySelector(".countdown"); 
