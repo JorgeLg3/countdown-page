@@ -64,6 +64,64 @@
         .smoke canvas{
             opacity: 40%;
         }
+        .box-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            perspective: 800px;
+        }
+
+        .box {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            transform-style: preserve-3d;
+            transform: rotateX(45deg) rotateY(45deg);
+            animation: rotate 10s infinite linear;
+        }
+
+        .face {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent faces */
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .front {
+            transform: translateZ(10px);
+        }
+
+        .back {
+            transform: rotateY(180deg) translateZ(10px);
+        }
+
+        .left {
+            transform: rotateY(-90deg) translateZ(10px);
+        }
+
+        .right {
+            transform: rotateY(90deg) translateZ(10px);
+        }
+
+        .top {
+            transform: rotateX(90deg) translateZ(10px);
+        }
+
+        .bottom {
+            transform: rotateX(-90deg) translateZ(10px);
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -93,6 +151,16 @@
     </div>
     <div class="smoke">
         <canvas id="smoke-canvas"></canvas>
+    </div>
+    <div class="box-container">
+        <div class="box">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+        </div>
     </div>
     <script>
         // Constant delcaration 
